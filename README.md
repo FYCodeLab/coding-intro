@@ -1,5 +1,5 @@
 # Coding-Intro 🚀
-Welcome to **Coding 101 Courses**! This repository contains beginner-friendly programming courses.
+Welcome to **Coding Intro Courses**! This repository contains beginner-friendly programming courses.
 
 ---
 
