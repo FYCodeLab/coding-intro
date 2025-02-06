@@ -14,8 +14,7 @@ Welcome to **Coding Intro Courses**! This repository contains beginner-friendly 
 **Chapter 2 - What are libraries ?**  
 📖 Learn how to use libraries and why they are so important and useful in programming.\
 🔗 **Open the course in Google Colab**:  
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://github.com/FYCodeLab/coding-intro/blob/main/R/INTRODUCTION_A_R_CH2_F_G.ipynb)
-
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/FYCodeLab/coding-intro/blob/main/R/INTRODUCTION_A_R_CH2_F_G.ipynb)
 
 ---
 
