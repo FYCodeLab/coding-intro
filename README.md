@@ -9,7 +9,7 @@ Welcome to **Coding Intro Courses**! This repository contains beginner-friendly 
 **Chapter 1 - The Basics**  
 📖 Learn the fundamentals of R programming, including syntax, data structures, and basic operations.
 
-🔗 **Open in Google Colab**:  
+🔗 **Open the course in Google Colab**:  
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/FYCodeLab/coding-intro/blob/main/R/INTRODUCTION_A_R_CH1_G.ipynb)
 
 ---
