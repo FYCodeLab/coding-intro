@@ -6,16 +6,16 @@ Welcome to **Coding Intro Courses**! This repository contains beginner-friendly 
 ## 📌 Courses Available
 
 ### 📘 Introduction to R  
-**Chapter 1 - The Basics**  
+- **Chapter 1 - The Basics**  
 📖 Learn the fundamentals of R programming, including syntax, data structures, and basic operations.\
 🔗 **Open the course in Google Colab**:  
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/FYCodeLab/coding-intro/blob/main/R/INTRODUCTION_A_R_CH1_G.ipynb)
+[![French Flag](https://flagcdn.com/24x18/fr.png)](https://colab.research.google.com/github/FYCodeLab/coding-intro/blob/main/R/INTRODUCTION_A_R_CH1_G.ipynb)&nbsp;[![Open in collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/FYCodeLab/coding-intro/blob/main/R/INTRODUCTION_A_R_CH1_G.ipynb)&nbsp;&nbsp;&nbsp;&nbsp; [![UK Flag](https://flagcdn.com/24x18/gb.png)](https://colab.research.google.com/github/FYCodeLab/coding-intro/blob/main/R/INTRO_TO_R_chapter_1_en_G.ipynb)&nbsp;[![Open in collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/FYCodeLab/coding-intro/blob/main/R/INTRO_TO_R_chapter_1_en_G.ipynb)
 
-**Chapter 2 - What are libraries ?**  
+
+- **Chapter 2 - What are libraries ?**  
 📖 Learn how to use libraries and why they are so important and useful in programming.\
-🔗 **Open the course in Google Colab**:  
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/FYCodeLab/coding-intro/blob/main/R/INTRODUCTION_A_R_CH2_F_G.ipynb)
-
+🔗 **Open the course in Google Colab**:\
+[![French Flag](https://flagcdn.com/24x18/fr.png)](https://colab.research.google.com/github/FYCodeLab/coding-intro/blob/main/R/INTRODUCTION_A_R_CH2_F_G.ipynb)&nbsp;[![Open in collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/FYCodeLab/coding-intro/blob/main/R/INTRODUCTION_A_R_CH2_F_G.ipynb)&nbsp;&nbsp;&nbsp;&nbsp; [![UK Flag](https://flagcdn.com/24x18/gb.png)](https://colab.research.google.com/github/FYCodeLab/coding-intro/blob/main/R/INTRO_TO_R_CH2_EN_G.ipynb)&nbsp;[![Open in collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/FYCodeLab/coding-intro/blob/main/R/INTRO_TO_R_CH2_EN_G.ipynb)
 ---
 
 
