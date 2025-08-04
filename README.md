@@ -26,7 +26,9 @@ A beginner-friendly programming repository covering the basics of R.
 - **Chapter 1 - Basic functions**  
 📖 Learn the basic operations and functions.\
 🔗 **Open the course in Google Colab**:
-[![French Flag](https://flagcdn.com/24x18/fr.png)](https://colab.research.google.com/github/FYCodeLab/coding-intro/blob/main/PYTHON/PYTHON_intro_chap1_fr.ipynb)&nbsp;[![Open in collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/FYCodeLab/coding-intro/blob/main/PYTHON/PYTHON_intro_chap1_fr.ipynb)&nbsp;&nbsp;&nbsp;&nbsp;
+[![French Flag](https://flagcdn.com/24x18/fr.png)](https://colab.research.google.com/github/FYCodeLab/coding-intro/blob/main/PYTHON/PYTHON_intro_chap1_fr.ipynb)&nbsp;[![Open in collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/FYCodeLab/coding-intro/blob/main/PYTHON/PYTHON_intro_chap1_fr.ipynb)&nbsp;&nbsp;&nbsp;&[![UK Flag](https://flagcdn.com/24x18/gb.png)](https://colab.research.google.com/github/FYCodeLab/coding-intro/blob/main/PYTHON/PYTHON_intro_chap1_en.ipynb)&nbsp;[![Open in collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/FYCodeLab/coding-intro/blob/main/PYTHON/PYTHON_intro_chap1_en.ipynb)
+
+
 
 
 
