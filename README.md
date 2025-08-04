@@ -11,7 +11,7 @@ A beginner-friendly programming repository covering the basics of R.
 - **Chapter 1 - The Basics of R**  
 📖 Learn the fundamentals of R programming, including syntax, data structures, and basic operations.\
 🔗 **Open the course in Google Colab**:
-[![French Flag](https://flagcdn.com/24x18/fr.png)](https://colab.research.google.com/github/FYCodeLab/coding-intro/blob/main/R/INTRODUCTION_A_R_CH1_G.ipynb)&nbsp;[![Open in collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/FYCodeLab/coding-intro/blob/main/R/INTRODUCTION_A_R_CH1_G.ipynb)&nbsp;&nbsp;&nbsp;&nbsp; [![UK Flag](https://flagcdn.com/24x18/gb.png)](https://colab.research.google.com/github/FYCodeLab/coding-intro/blob/main/R/INTRO_TO_R_chapter_1_en_G.ipynb)&nbsp;[![Open in collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/FYCodeLab/coding-intro/blob/main/R/INTRO_TO_R_chapter_1_en_G.ipynb)
+[![French Flag](https://flagcdn.com/24x18/fr.png)](https://colab.research.google.com/github/FYCodeLab/coding-intro/blob/main/R/INTRODUCTION_A_R_CH1_G.ipynb)&nbsp;[![Ouvrir en colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/FYCodeLab/coding-intro/blob/main/R/INTRODUCTION_A_R_CH1_G.ipynb)&nbsp;&nbsp;&nbsp;&nbsp; [![UK Flag](https://flagcdn.com/24x18/gb.png)](https://colab.research.google.com/github/FYCodeLab/coding-intro/blob/main/R/INTRO_TO_R_chapter_1_en_G.ipynb)&nbsp;[![Open in collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/FYCodeLab/coding-intro/blob/main/R/INTRO_TO_R_chapter_1_en_G.ipynb)
 
 
 - **Chapter 2 - What are libraries in R ?**  
