@@ -32,7 +32,7 @@ A beginner-friendly programming repository covering the basics of R.
 
 
 
-- **Chapter 2 - A simple guide to Python libraries **  
+- **Chapter 2 - A simple guide to Python libraries**
 📖 Learn how to use simple libraries and why libraries are so important and useful in programming.\
 🔗 **Open the course in Google Colab**:
 [![French Flag](https://flagcdn.com/24x18/fr.png)](https://colab.research.google.com/github/FYCodeLab/coding-intro/blob/main/PYTHON/PYTHON_lib_chap2_fr.ipynb)&nbsp;[![Open in collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/FYCodeLab/coding-intro/blob/main/PYTHON/PYTHON_lib_chap2_fr.ipynb)&nbsp;&nbsp;&nbsp;[![UK Flag](https://flagcdn.com/24x18/gb.png)](https://colab.research.google.com/github/FYCodeLab/coding-intro/blob/main/PYTHON/PYTHON_lib_chap2_en.ipynb)&nbsp;[![Open in collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/FYCodeLab/coding-intro/blob/main/PYTHON/PYTHON_lib_chap2_en.ipynb)
