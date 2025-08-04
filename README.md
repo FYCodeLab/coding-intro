@@ -6,7 +6,7 @@ Welcome to **Coding Intro Courses**! This repository contains beginner-friendly 
 ## 📌 Courses Available
 
 ### 📘 [Coding-Intro](https://github.com/FYCodeLab/coding-intro)
-##![Intro to R](https://img.shields.io/badge/Intro%20to%20the%20programming%20language%20R-276DC3?style=for-the-badge&logo=r&logoColor=white)\
+![Intro to R](https://img.shields.io/badge/Intro%20to%20the%20programming%20language%20R-276DC3?style=for-the-badge&logo=r&logoColor=white)\
 A beginner-friendly programming repository covering the basics of R.  
 - **Chapter 1 - The Basics of R**  
 📖 Learn the fundamentals of R programming, including syntax, data structures, and basic operations.\
