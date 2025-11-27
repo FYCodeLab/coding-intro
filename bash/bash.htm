@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bash Trainer – GameShell-style</title>
+  <style>
+    :root {
+      --bg: #111317;
+      --panel-bg: #181b22;
+      --accent: #4caf50;
+      --accent-soft: rgba(76, 175, 80, 0.15);
+      --border: #2a2f3a;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --error: #f87171;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top, #1f2933 0, #050608 50%, #000 100%);
+      color: var(--text);
+      font-family: var(--font-sans);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      padding: 10px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(90deg, #020617, #0b1120);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    header h1 span {
+      color: var(--accent);
+    }
+
+    header .subtitle {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(260px, 340px) minmax(0, 1fr);
+      gap: 12px;
+      padding: 12px;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .panel {
+      background: radial-gradient(circle at top left, #1f2933 0, #020617 55%);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .panel-title {
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+
+    .badge {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      background-color: var(--accent-soft);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .mission-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      overflow-y: auto;
+      font-size: 13px;
+    }
+
+    .mission-item {
+      border-radius: 8px;
+      border: 1px solid transparent;
+      padding: 8px 9px;
+      margin-bottom: 6px;
+      cursor: pointer;
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.6));
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      transition: border 0.15s ease, background 0.15s ease, transform 0.05s ease;
+    }
+
+    .mission-item:hover {
+      border-color: rgba(148, 163, 184, 0.5);
+      transform: translateY(-1px);
+    }
+
+    .mission-item.active {
+      border-color: var(--accent);
+      background: radial-gradient(circle at left, rgba(34, 197, 94, 0.22), rgba(15, 23, 42, 0.9));
+    }
+
+    .mission-item.completed {
+      border-color: rgba(34, 197, 94, 0.6);
+    }
+
+    .mission-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+
+    .mission-name {
+      font-weight: 600;
+    }
+
+    .mission-status {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+
+    .mission-status.completed {
+      color: var(--accent);
+    }
+
+    .mission-status.locked {
+      color: #6b7280;
+    }
+
+    .mission-desc {
+      color: var(--muted);
+    }
+
+    .mission-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 3px;
+    }
+
+    .mission-tag {
+      font-size: 10px;
+      padding: 1px 6px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid #273549;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+
+    .mission-details {
+      margin-top: 6px;
+      padding: 7px 8px;
+      border-radius: 8px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px dashed #273549;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .mission-details code {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      background: #020617;
+      padding: 1px 4px;
+      border-radius: 4px;
+    }
+
+    .mission-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 8px;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    button {
+      font-family: var(--font-sans);
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: linear-gradient(135deg, #020617, #020617);
+      color: var(--text);
+      font-size: 12px;
+      padding: 5px 10px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: background 0.15s ease, border 0.15s ease, transform 0.05s ease;
+    }
+
+    button.primary {
+      border-color: var(--accent);
+      background: linear-gradient(135deg, #16a34a, #22c55e);
+    }
+
+    button:hover {
+      transform: translateY(-0.5px);
+      border-color: #4b5563;
+    }
+
+    button.primary:hover {
+      filter: brightness(1.05);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .terminal-wrapper {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .terminal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .terminal-title {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+    }
+
+    .terminal-buttons {
+      display: flex;
+      gap: 4px;
+    }
+
+    .circle {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: #ef4444;
+    }
+
+    .circle.yellow {
+      background: #eab308;
+    }
+
+    .circle.green {
+      background: #22c55e;
+    }
+
+    .terminal {
+      flex: 1;
+      min-height: 0;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: radial-gradient(ellipse at top, #020617 0, #020617 55%, #000 100%);
+      padding: 8px 10px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .terminal-output {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      padding-right: 4px;
+    }
+
+    .terminal-line {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+    }
+
+    .prompt {
+      color: var(--accent);
+    }
+
+    .terminal-input-row {
+      display: flex;
+      align-items: center;
+      margin-top: 4px;
+      gap: 6px;
+    }
+
+    .terminal-input-row .prompt {
+      flex-shrink: 0;
+    }
+
+    #commandInput {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      flex: 1;
+    }
+
+    .terminal-hint {
+      margin-top: 5px;
+      font-size: 11px;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .terminal-hint code {
+      font-family: var(--font-mono);
+      background: #020617;
+      padding: 1px 4px;
+      border-radius: 4px;
+    }
+
+    .output-error {
+      color: var(--error);
+    }
+
+    .output-info {
+      color: var(--muted);
+    }
+
+    .output-success {
+      color: var(--accent);
+    }
+
+    .cwd-label {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    @media (max-width: 800px) {
+      .layout {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+      }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div>
+    <h1><span>$</span> Bash Trainer</h1>
+    <div class="subtitle">GameShell-style missions in a browser shell</div>
+  </div>
+  <div class="subtitle">Type <code>help</code> in the shell to list commands</div>
+</header>
+
+<div class="layout">
+  <!-- Mission panel -->
+  <section class="panel">
+    <div class="panel-header">
+      <div class="panel-title">Mission log</div>
+      <span class="badge" id="difficultyBadge">Beginner path</span>
+    </div>
+    <ul class="mission-list" id="missionList">
+      <!-- Missions injected by JS -->
+    </ul>
+
+    <div class="mission-details" id="missionDetails">
+      Select a mission on the left.  
+      Use the shell on the right.  
+      When the goal is satisfied, the mission will complete automatically.
+    </div>
+
+    <div class="mission-controls">
+      <div>
+        <strong>Progress:</strong>
+        <span id="progressLabel">0 / 0 completed</span>
+      </div>
+      <div>
+        <button id="resetMissionBtn">Reset mission</button>
+        <button id="nextMissionBtn" class="primary">Next mission</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Terminal panel -->
+  <section class="panel terminal-wrapper">
+    <div class="terminal-header">
+      <div>
+        <div class="terminal-title">Virtual Bash shell</div>
+        <div class="cwd-label" id="cwdLabel">cwd: /</div>
+      </div>
+      <div class="terminal-buttons">
+        <div class="circle"></div>
+        <div class="circle yellow"></div>
+        <div class="circle green"></div>
+      </div>
+    </div>
+
+    <div class="terminal" id="terminal">
+      <div class="terminal-output" id="terminalOutput"></div>
+      <div class="terminal-input-row">
+        <span class="prompt" id="promptLabel">student@castle:~$</span>
+        <input id="commandInput" autocomplete="off" spellcheck="false" autofocus />
+      </div>
+      <div class="terminal-hint">
+        <span>Press <code>Enter</code> to execute, use <code>&uarr;</code> / <code>&darr;</code> for history.</span>
+        <span>Try <code>help</code>, <code>ls</code>, <code>pwd</code>, <code>cd</code>, <code>mkdir</code>, <code>cat</code>.</span>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  // Minimal virtual filesystem representation
+  // Each node: { type: 'dir' | 'file', children?: {...}, content?: string }
+  function makeDir(children = {}) {
+    return { type: 'dir', children };
+  }
+
+  function makeFile(content = "") {
+    return { type: 'file', content };
+  }
+
+  // Missions adapted to a castle theme (similar to GameShell basic track)
+  const missions = [
+    {
+      id: "01_cd_tower",
+      name: "Reach the tower",
+      description: "You start in /castle. Use cd to move into /castle/tower.",
+      tags: ["cd", "navigation"],
+      difficulty: "beginner",
+      locked: false,
+      initialState: () => ({
+        cwd: "/castle",
+        fs: makeDir({
+          castle: makeDir({
+            tower: makeDir({
+              "view.txt": makeFile("You see distant mountains.")
+            }),
+            cellar: makeDir({
+              "spider.txt": makeFile("A dusty corner with spider webs.")
+            }),
+            garden: makeDir({})
+          })
+        })
+      }),
+      goalDescription: "Current directory must be /castle/tower.",
+      goalCheck: (state) => state.cwd === "/castle/tower"
+    },
+    {
+      id: "02_cd_cellar",
+      name: "Down to the cellar",
+      description: "You are in /castle/tower. Use cd to go to /castle/cellar.",
+      tags: ["cd", "relative paths"],
+      difficulty: "beginner",
+      locked: false,
+      initialState: () => ({
+        cwd: "/castle/tower",
+        fs: makeDir({
+          castle: makeDir({
+            tower: makeDir({}),
+            cellar: makeDir({
+              "torch.txt": makeFile("A flickering torch lights the cellar.")
+            })
+          })
+        })
+      }),
+      goalDescription: "Current directory must be /castle/cellar.",
+      goalCheck: (state) => state.cwd === "/castle/cellar"
+    },
+    {
+      id: "03_mkdir_chest",
+      name: "Create the treasure chest",
+      description: "You are in /castle/throne_room. Create a directory named chest.",
+      tags: ["mkdir"],
+      difficulty: "beginner",
+      locked: false,
+      initialState: () => ({
+        cwd: "/castle/throne_room",
+        fs: makeDir({
+          castle: makeDir({
+            throne_room: makeDir({
+              "throne.txt": makeFile("The king's throne.")
+            })
+          })
+        })
+      }),
+      goalDescription: "A directory /castle/throne_room/chest must exist.",
+      goalCheck: (state) => {
+        const node = getNode(state.fs, "/castle/throne_room/chest");
+        return node && node.type === "dir";
+      }
+    },
+    {
+      id: "04_mv_coins",
+      name: "Move the coins to the chest",
+      description: "Coins are in /castle/great_hall. Create chest/ then move coins.txt inside it.",
+      tags: ["mv", "mkdir"],
+      difficulty: "beginner",
+      locked: false,
+      initialState: () => ({
+        cwd: "/castle/great_hall",
+        fs: makeDir({
+          castle: makeDir({
+            great_hall: makeDir({
+              "coins.txt": makeFile("A small pile of gold coins.")
+            })
+          })
+        })
+      }),
+      goalDescription: "Directory chest/ exists and coins.txt is inside it.",
+      goalCheck: (state) => {
+        const chest = getNode(state.fs, "/castle/great_hall/chest");
+        const coins = getNode(state.fs, "/castle/great_hall/chest/coins.txt");
+        return chest && chest.type === "dir" && coins && coins.type === "file";
+      }
+    },
+    {
+      id: "05_cat_clue",
+      name: "Read the clue",
+      description: "A file clue.txt is in the current directory. Use cat to read it.",
+      tags: ["cat"],
+      difficulty: "beginner",
+      locked: false,
+      initialState: () => ({
+        cwd: "/cellar",
+        fs: makeDir({
+          cellar: makeDir({
+            "clue.txt": makeFile("To leave the maze, type: exit")
+          })
+        })
+      }),
+      goalDescription: "The last command used cat on clue.txt.",
+      goalCheck: (state, lastCommand) => {
+        if (!lastCommand) return false;
+        const [cmd, arg] = lastCommand.trim().split(/\s+/, 2);
+        return cmd === "cat" && arg === "clue.txt";
+      }
+    }
+  ];
+
+  // Shell state
+  let currentMissionIndex = 0;
+  let state = null;
+  let history = [];
+  let historyIndex = -1;
+  let lastCommand = "";
+
+  const missionListEl = document.getElementById("missionList");
+  const missionDetailsEl = document.getElementById("missionDetails");
+  const progressLabelEl = document.getElementById("progressLabel");
+  const difficultyBadgeEl = document.getElementById("difficultyBadge");
+
+  const cwdLabelEl = document.getElementById("cwdLabel");
+  const promptLabelEl = document.getElementById("promptLabel");
+  const terminalOutputEl = document.getElementById("terminalOutput");
+  const commandInputEl = document.getElementById("commandInput");
+
+  const resetMissionBtn = document.getElementById("resetMissionBtn");
+  const nextMissionBtn = document.getElementById("nextMissionBtn");
+
+  function deepClone(obj) {
+    return JSON.parse(JSON.stringify(obj));
+  }
+
+  function pathNormalize(path, cwd) {
+    if (!path || path === ".") return cwd;
+    if (path.startsWith("/")) {
+      // absolute
+    } else {
+      if (!cwd.endsWith("/")) cwd += "/";
+      path = cwd + path;
+    }
+    const parts = path.split("/").filter(Boolean);
+    const stack = [];
+    for (const p of parts) {
+      if (p === ".") continue;
+      if (p === "..") {
+        if (stack.length > 0) stack.pop();
+      } else {
+        stack.push(p);
+      }
+    }
+    return "/" + stack.join("/");
+  }
+
+  function getNode(root, path) {
+    if (path === "/") return root;
+    const parts = path.split("/").filter(Boolean);
+    let node = root;
+    for (const p of parts) {
+      if (!node || node.type !== "dir") return null;
+      node = node.children[p];
+      if (!node) return null;
+    }
+    return node;
+  }
+
+  function ensureDir(root, path) {
+    if (path === "/") return root;
+    const parts = path.split("/").filter(Boolean);
+    let node = root;
+    for (const p of parts) {
+      if (!node.children[p]) {
+        node.children[p] = makeDir();
+      }
+      node = node.children[p];
+    }
+    return node;
+  }
+
+  function parentPath(path) {
+    if (path === "/") return "/";
+    const parts = path.split("/").filter(Boolean);
+    parts.pop();
+    return "/" + parts.join("/");
+  }
+
+  function nodeName(path) {
+    if (path === "/") return "/";
+    const parts = path.split("/").filter(Boolean);
+    return parts[parts.length - 1];
+  }
+
+  function lsCommand(pathArg) {
+    const targetPath = pathNormalize(pathArg || ".", state.cwd);
+    const node = getNode(state.fs, targetPath);
+    if (!node) {
+      printError("ls: cannot access '" + pathArg + "': No such file or directory");
+      return;
+    }
+    if (node.type === "file") {
+      printLine(nodeName(targetPath));
+      return;
+    }
+    const names = Object.keys(node.children).sort();
+    printLine(names.join("  "));
+  }
+
+  function cdCommand(pathArg) {
+    const dest = pathNormalize(pathArg || "/", state.cwd);
+    const node = getNode(state.fs, dest);
+    if (!node || node.type !== "dir") {
+      printError("cd: " + (pathArg || "") + ": No such directory");
+      return;
+    }
+    state.cwd = dest;
+    updatePrompt();
+  }
+
+  function pwdCommand() {
+    printLine(state.cwd);
+  }
+
+  function mkdirCommand(name) {
+    if (!name) {
+      printError("mkdir: missing operand");
+      return;
+    }
+    const destPath = pathNormalize(name, state.cwd);
+    const parent = getNode(state.fs, parentPath(destPath));
+    if (!parent || parent.type !== "dir") {
+      printError("mkdir: cannot create directory '" + name + "': No such parent directory");
+      return;
+    }
+    const base = nodeName(destPath);
+    if (parent.children[base]) {
+      printError("mkdir: cannot create directory '" + name + "': File exists");
+      return;
+    }
+    parent.children[base] = makeDir();
+  }
+
+  function catCommand(name) {
+    if (!name) {
+      printError("cat: missing file operand");
+      return;
+    }
+    const destPath = pathNormalize(name, state.cwd);
+    const node = getNode(state.fs, destPath);
+    if (!node || node.type !== "file") {
+      printError("cat: " + name + ": No such file");
+      return;
+    }
+    printLine(node.content || "");
+  }
+
+  function touchCommand(name) {
+    if (!name) {
+      printError("touch: missing file operand");
+      return;
+    }
+    const destPath = pathNormalize(name, state.cwd);
+    const parent = getNode(state.fs, parentPath(destPath));
+    if (!parent || parent.type !== "dir") {
+      printError("touch: cannot touch '" + name + "': No such parent directory");
+      return;
+    }
+    const base = nodeName(destPath);
+    if (!parent.children[base]) {
+      parent.children[base] = makeFile("");
+    }
+  }
+
+  function rmCommand(name) {
+    if (!name) {
+      printError("rm: missing operand");
+      return;
+    }
+    const destPath = pathNormalize(name, state.cwd);
+    if (destPath === "/") {
+      printError("rm: refusing to remove root");
+      return;
+    }
+    const parent = getNode(state.fs, parentPath(destPath));
+    if (!parent || parent.type !== "dir") {
+      printError("rm: cannot remove '" + name + "': No such file or directory");
+      return;
+    }
+    const base = nodeName(destPath);
+    const node = parent.children[base];
+    if (!node) {
+      printError("rm: cannot remove '" + name + "': No such file or directory");
+      return;
+    }
+    if (node.type === "dir" && Object.keys(node.children).length > 0) {
+      printError("rm: cannot remove '" + name + "': Directory not empty (no recursive rm implemented)");
+      return;
+    }
+    delete parent.children[base];
+  }
+
+  function mvCommand(src, dest) {
+    if (!src || !dest) {
+      printError("mv: missing operand");
+      return;
+    }
+    const srcPath = pathNormalize(src, state.cwd);
+    const srcParent = getNode(state.fs, parentPath(srcPath));
+    if (!srcParent || srcParent.type !== "dir") {
+      printError("mv: cannot stat '" + src + "': No such file or directory");
+      return;
+    }
+    const srcBase = nodeName(srcPath);
+    const node = srcParent.children[srcBase];
+    if (!node) {
+      printError("mv: cannot stat '" + src + "': No such file or directory");
+      return;
+    }
+
+    const destPath = pathNormalize(dest, state.cwd);
+    let destParent;
+    let destBase;
+
+    const destNode = getNode(state.fs, destPath);
+    if (destNode && destNode.type === "dir") {
+      destParent = destNode;
+      destBase = srcBase;
+    } else {
+      destParent = getNode(state.fs, parentPath(destPath));
+      if (!destParent || destParent.type !== "dir") {
+        printError("mv: cannot move to '" + dest + "': Target directory does not exist");
+        return;
+      }
+      destBase = nodeName(destPath);
+    }
+
+    destParent.children[destBase] = node;
+    delete srcParent.children[srcBase];
+  }
+
+  function printLine(text, className) {
+    const div = document.createElement("div");
+    div.textContent = text;
+    if (className) div.className = className;
+    terminalOutputEl.appendChild(div);
+    terminalOutputEl.scrollTop = terminalOutputEl.scrollHeight;
+  }
+
+  function printError(text) {
+    printLine(text, "output-error");
+  }
+
+  function printInfo(text) {
+    printLine(text, "output-info");
+  }
+
+  function printSuccess(text) {
+    printLine(text, "output-success");
+  }
+
+  function updatePrompt() {
+    cwdLabelEl.textContent = "cwd: " + state.cwd;
+    const host = "castle";
+    const user = "student";
+    const shortCwd = state.cwd === "/"
+      ? "/"
+      : state.cwd.split("/").filter(Boolean).slice(-1)[0] || "/";
+    promptLabelEl.textContent = user + "@" + host + ":" + shortCwd + "$";
+  }
+
+  function clearTerminal() {
+    terminalOutputEl.innerHTML = "";
+  }
+
+  function currentMission() {
+    return missions[currentMissionIndex];
+  }
+
+  function countCompleted() {
+    return missions.filter(m => m._completed).length;
+  }
+
+  function updateProgress() {
+    progressLabelEl.textContent = countCompleted() + " / " + missions.length + " completed";
+  }
+
+  function renderMissionList() {
+    missionListEl.innerHTML = "";
+    missions.forEach((mission, index) => {
+      const li = document.createElement("li");
+      li.className = "mission-item" +
+        (index === currentMissionIndex ? " active" : "") +
+        (mission._completed ? " completed" : "");
+
+      const titleRow = document.createElement("div");
+      titleRow.className = "mission-title-row";
+
+      const nameSpan = document.createElement("span");
+      nameSpan.className = "mission-name";
+      nameSpan.textContent = (index + 1).toString().padStart(2, "0") + " · " + mission.name;
+
+      const statusSpan = document.createElement("span");
+      statusSpan.className = "mission-status";
+      if (mission._completed) {
+        statusSpan.classList.add("completed");
+        statusSpan.textContent = "Completed";
+      } else if (mission.locked) {
+        statusSpan.classList.add("locked");
+        statusSpan.textContent = "Locked";
+      } else {
+        statusSpan.textContent = "Active";
+      }
+
+      titleRow.appendChild(nameSpan);
+      titleRow.appendChild(statusSpan);
+      li.appendChild(titleRow);
+
+      const descDiv = document.createElement("div");
+      descDiv.className = "mission-desc";
+      descDiv.textContent = mission.description;
+      li.appendChild(descDiv);
+
+      const tagsDiv = document.createElement("div");
+      tagsDiv.className = "mission-tags";
+      mission.tags.forEach(tag => {
+        const span = document.createElement("span");
+        span.className = "mission-tag";
+        span.textContent = tag;
+        tagsDiv.appendChild(span);
+      });
+      li.appendChild(tagsDiv);
+
+      li.addEventListener("click", () => {
+        if (mission.locked) return;
+        currentMissionIndex = index;
+        startMission();
+      });
+
+      missionListEl.appendChild(li);
+    });
+  }
+
+  function showMissionDetails() {
+    const m = currentMission();
+    missionDetailsEl.innerHTML =
+      "<strong>Mission:</strong> " + m.name + "<br>" +
+      "<strong>Goal:</strong> " + m.goalDescription + "<br><br>" +
+      "<strong>Suggested commands:</strong> <code>" +
+      m.tags.join("</code> <code>") + "</code>";
+  }
+
+  function startMission() {
+    const m = currentMission();
+    state = m.initialState();
+    state.fs = deepClone(state.fs);
+    history = [];
+    historyIndex = -1;
+    lastCommand = "";
+    clearTerminal();
+    updatePrompt();
+    renderMissionList();
+    showMissionDetails();
+    updateProgress();
+    commandInputEl.focus();
+  }
+
+  function completeMission() {
+    const m = currentMission();
+    if (!m._completed) {
+      m._completed = true;
+      printSuccess("Mission complete: " + m.name);
+      updateProgress();
+      renderMissionList();
+    }
+  }
+
+  function nextMission() {
+    const next = missions.findIndex((m, idx) => idx > currentMissionIndex && !m.locked);
+    if (next !== -1) {
+      currentMissionIndex = next;
+      startMission();
+      return;
+    }
+    printInfo("No further mission unlocked. You may reset or replay any mission.");
+  }
+
+  function handleHelp() {
+    printInfo("Available commands:");
+    printLine("  help                 Show this help");
+    printLine("  clear                Clear the screen");
+    printLine("  ls [path]            List directory contents");
+    printLine("  cd [path]            Change directory");
+    printLine("  pwd                  Print current directory");
+    printLine("  mkdir NAME           Create directory");
+    printLine("  touch FILE           Create empty file");
+    printLine("  rm NAME              Remove file or empty directory");
+    printLine("  mv SRC DEST          Move or rename");
+    printLine("  cat FILE             Print file");
+    printLine("  mission              Show current mission details");
+    printLine("  missions             List missions and status");
+    printLine("  reset                Reset current mission");
+  }
+
+  function handleCommand(raw) {
+    const command = raw.trim();
+    if (command === "") return;
+    lastCommand = command;
+
+    // Echo in terminal
+    const lineDiv = document.createElement("div");
+    lineDiv.className = "terminal-line";
+    const promptSpan = document.createElement("span");
+    promptSpan.className = "prompt";
+    promptSpan.textContent = promptLabelEl.textContent;
+    const cmdSpan = document.createElement("span");
+    cmdSpan.textContent = command;
+    lineDiv.appendChild(promptSpan);
+    lineDiv.appendChild(cmdSpan);
+    terminalOutputEl.appendChild(lineDiv);
+    terminalOutputEl.scrollTop = terminalOutputEl.scrollHeight;
+
+    const [cmd, ...args] = command.split(/\s+/);
+    const m = currentMission();
+
+    switch (cmd) {
+      case "help":
+        handleHelp();
+        break;
+      case "clear":
+        clearTerminal();
+        break;
+      case "ls":
+        lsCommand(args[0]);
+        break;
+      case "cd":
+        cdCommand(args[0]);
+        break;
+      case "pwd":
+        pwdCommand();
+        break;
+      case "mkdir":
+        mkdirCommand(args[0]);
+        break;
+      case "cat":
+        catCommand(args[0]);
+        break;
+      case "touch":
+        touchCommand(args[0]);
+        break;
+      case "rm":
+        rmCommand(args[0]);
+        break;
+      case "mv":
+        mvCommand(args[0], args[1]);
+        break;
+      case "mission":
+        showMissionDetails();
+        break;
+      case "missions":
+        missions.forEach((mission, index) => {
+          const status = mission._completed ? "[x]" : "[ ]";
+          printLine(status + " " + (index + 1).toString().padStart(2, "0") + " " + mission.name);
+        });
+        break;
+      case "reset":
+        startMission();
+        printInfo("Mission reset.");
+        break;
+      default:
+        printError(cmd + ": command not implemented in this trainer");
+    }
+
+    if (m.goalCheck(state, lastCommand)) {
+      completeMission();
+    }
+  }
+
+  // Event listeners
+  commandInputEl.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      const value = commandInputEl.value;
+      commandInputEl.value = "";
+      history.push(value);
+      historyIndex = history.length;
+      handleCommand(value);
+    } else if (e.key === "ArrowUp") {
+      if (history.length === 0) return;
+      historyIndex = Math.max(0, historyIndex - 1);
+      commandInputEl.value = history[historyIndex] || "";
+      setTimeout(() => {
+        commandInputEl.selectionStart = commandInputEl.selectionEnd = commandInputEl.value.length;
+      }, 0);
+      e.preventDefault();
+    } else if (e.key === "ArrowDown") {
+      if (history.length === 0) return;
+      historyIndex = Math.min(history.length, historyIndex + 1);
+      commandInputEl.value = history[historyIndex] || "";
+      setTimeout(() => {
+        commandInputEl.selectionStart = commandInputEl.selectionEnd = commandInputEl.value.length;
+      }, 0);
+      e.preventDefault();
+    }
+  });
+
+  resetMissionBtn.addEventListener("click", () => {
+    startMission();
+    printInfo("Mission reset.");
+  });
+
+  nextMissionBtn.addEventListener("click", () => {
+    nextMission();
+  });
+
+  // Initialisation
+  function init() {
+    difficultyBadgeEl.textContent = "Beginner track";
+    missions.forEach(m => (m._completed = false));
+    renderMissionList();
+    startMission();
+  }
+
+  init();
+</script>
+</body>
+</html>
