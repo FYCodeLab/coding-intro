@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Linux Launchpad</title>
+    <style>
+        :root {
+            --term-bg: #0c0c0c;
+            --term-text: #33ff00;
+            --term-dim: #1a8000;
+            --panel-bg: #1a1a1a;
+            --panel-text: #e0e0e0;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            height: 100vh;
+            background-color: var(--term-bg);
+            color: var(--term-text);
+            overflow: hidden;
+        }
+
+        /* Left Panel: The Mission Control (Curriculum) */
+        #mission-control {
+            width: 30%;
+            background-color: var(--panel-bg);
+            color: var(--panel-text);
+            padding: 20px;
+            border-right: 2px solid var(--term-dim);
+            overflow-y: auto;
+            box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+        }
+
+        h1, h2, h3 { margin-top: 0; }
+        .highlight { color: #ffcc00; font-weight: bold; }
+        .cmd-hint { background: #333; padding: 2px 5px; border-radius: 3px; font-family: monospace; color: #fff; }
+
+        /* Right Panel: The Terminal */
+        #terminal-container {
+            width: 70%;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        #output {
+            flex-grow: 1;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            margin-bottom: 10px;
+        }
+
+        .input-line {
+            display: flex;
+            align-items: center;
+            border-top: 1px solid var(--term-dim);
+            padding-top: 10px;
+        }
+
+        .prompt {
+            color: #00ccff;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            background: transparent;
+            border: none;
+            color: var(--term-text);
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 16px;
+            flex-grow: 1;
+            outline: none;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: var(--term-dim); }
+    </style>
+</head>
+<body>
+
+    <div id="mission-control">
+        <h2>🚀 Linux Launchpad</h2>
+        <p>Welcome, Cadet. 97% of supercomputers run on Linux. Today, you join them.</p>
+        <hr>
+        
+        <div id="mission-display">
+            </div>
+    </div>
+
+    <div id="terminal-container">
+        <div id="output">Type 'help' to see available commands...
+Loading kernel...
+[OK] System check complete.
+Welcome to Ubuntu (Simulated).
+        </div>
+        <div class="input-line">
+            <span class="prompt">train1@linux:~$</span>
+            <input type="text" id="cmd-input" autofocus autocomplete="off" spellcheck="false">
+        </div>
+    </div>
+
+    <script>
+        // --- GAME STATE & DATA ---
+        const user = "train1"; [span_0](start_span)// Based on source text[span_0](end_span)
+        const hostname = "linux";
+        let currentDir = "~";
+        
+        // Virtual File System
+        const fileSystem = {
+            "~": {
+                "notes.txt": "Linux is used by SpaceX and NASA. It is free and open source.",
+                "todo.list": "1. Learn ls\n2. Learn cd\n3. Master the universe",
+                "secret_plans.txt": "Top secret mission data."
+            },
+            "~/projects": {
+                "script.sh": "echo 'Hello World'"
+            },
+            "/etc": {
+                "passwd": "root:x:0:0:root:/root:/bin/bash\ntrain1:x:1000:1000:,,,:/home/train1:/bin/bash",
+                "shadow": "PERMISSION DENIED"
+            }
+        };
+
+        // Mission Data
+        const missions = [
+            {
+                id: 1,
+                title: "Phase 1: Situation Awareness",
+                desc: "You are in the shell. Find out who you are and where you are.",
+                tasks: ["whoami", "pwd"],
+                completed: []
+            },
+            {
+                id: 2,
+                title: "Phase 2: Radar Sweep",
+                desc: "List the files in your directory using the list command. Try the long format too.",
+                tasks: ["ls", "ls -l"],
+                completed: []
+            },
+            {
+                id: 3,
+                title: "Phase 3: The Content",
+                desc: "Read the content of 'notes.txt' using the concatenate command.",
+                tasks: ["cat notes.txt"],
+                completed: []
+            },
+            {
+                id: 4,
+                title: "Phase 4: Have Fun",
+                desc: "Linux has easter eggs. Try the steam locomotive command (sl) or the ASCII text command (figlet).",
+                tasks: ["sl", "figlet"],
+                completed: []
+            }
+        ];
+        let currentMissionIndex = 0;
+
+        // --- DOM ELEMENTS ---
+        const outputDiv = document.getElementById('output');
+        const inputField = document.getElementById('cmd-input');
+        const missionDisplay = document.getElementById('mission-display');
+
+        // --- CORE FUNCTIONS ---
+
+        function renderMission() {
+            const m = missions[currentMissionIndex];
+            if (!m) {
+                missionDisplay.innerHTML = "<h3>🎉 TRAINING COMPLETE!</h3><p>You are ready for the Scripting Course.</p>";
+                return;
+            }
+
+            let html = `<h3>${m.title}</h3><p>${m.desc}</p><ul>`;
+            m.tasks.forEach(task => {
+                const isDone = m.completed.includes(task.split(' ')[0]) ? "✅" : "⬜";
+                html += `<li>${isDone} <span class="cmd-hint">${task}</span></li>`;
+            });
+            html += `</ul>`;
+            missionDisplay.innerHTML = html;
+        }
+
+        function checkMissionProgress(cmd) {
+            const m = missions[currentMissionIndex];
+            if (!m) return;
+
+            // Simple check: if the command typed matches a task
+            // We normalize specific arguments for the sake of the game
+            const baseCmd = cmd.split(' ')[0];
+            
+            // Logic to mark tasks as done
+            m.tasks.forEach(task => {
+                if (cmd === task || (task.includes(baseCmd) && cmd.startsWith(baseCmd))) {
+                    if (!m.completed.includes(baseCmd)) {
+                        m.completed.push(baseCmd);
+                    }
+                }
+            });
+
+            // Check if level is done
+            const allDone = m.tasks.every(t => m.completed.includes(t.split(' ')[0]));
+            if (allDone) {
+                printOutput(`\n[SYSTEM] Mission '${m.title}' Completed! moving to next phase...\n`, "#ffcc00");
+                currentMissionIndex++;
+            }
+            renderMission();
+        }
+
+        function printOutput(text, color = "var(--term-text)") {
+            const span = document.createElement('div');
+            span.style.color = color;
+            span.textContent = text;
+            outputDiv.appendChild(span);
+            outputDiv.scrollTop = outputDiv.scrollHeight;
+        }
+
+        function processCommand(rawCmd) {
+            const args = rawCmd.trim().split(/\s+/);
+            const cmd = args[0].toLowerCase();
+            const arg1 = args[1];
+
+            if (cmd === "") return;
+
+            // Check mission progress
+            checkMissionProgress(rawCmd.trim());
+
+            switch (cmd) {
+                case "help":
+                    printOutput("Available commands: ls, cd, pwd, whoami, cat, date, sl, figlet, clear");
+                    break;
+
+                case "clear":
+                    outputDiv.innerHTML = "";
+                    break;
+
+                case "whoami":
+                    printOutput(user); [span_1](start_span)//[span_1](end_span)
+                    break;
+
+                case "pwd":
+                    [span_2](start_span)// Simulating home directory path[span_2](end_span)
+                    const pathDisplay = currentDir === "~" ? `/home/${user}` : currentDir;
+                    printOutput(pathDisplay);
+                    break;
+
+                case "date":
+                    printOutput(new Date().toString()); [span_3](start_span)//[span_3](end_span)
+                    break;
+
+                case "ls":
+                    [span_4](start_span)[span_5](start_span)// Simulating ls -l or ls -a[span_4](end_span)[span_5](end_span)
+                    let files = fileSystem[currentDir];
+                    if (!files) { printOutput("Error: Directory not found"); return; }
+                    
+                    let output = "";
+                    if (arg1 === "-l") {
+                        for (const [key, val] of Object.entries(files)) {
+                            output += `-rw-r--r-- 1 ${user} ${user} 1024 Oct 24 ${key}\n`;
+                        }
+                    } else {
+                        output = Object.keys(files).join("  ");
+                    }
+                    printOutput(output);
+                    break;
+
+                case "cd":
+                    // Simple CD logic
+                    if (!arg1 || arg1 === "~") {
+                        currentDir = "~";
+                    } else if (fileSystem[arg1]) {
+                        currentDir = arg1;
+                    } else if (arg1 === "..") {
+                        printOutput("Access denied to upper levels in this simulation.");
+                    } else {
+                        printOutput(`bash: cd: ${arg1}: No such file or directory`);
+                    }
+                    break;
+
+                case "cat":
+                    [span_6](start_span)// Display file contents[span_6](end_span)
+                    if (!arg1) {
+                        printOutput("Usage: cat [filename]");
+                        return;
+                    }
+                    const dirFiles = fileSystem[currentDir];
+                    if (dirFiles && dirFiles[arg1]) {
+                        printOutput(dirFiles[arg1]);
+                    } else {
+                        printOutput(`cat: ${arg1}: No such file or directory`);
+                    }
+                    break;
+
+                case "sl":
+                    [span_7](start_span)// Steam Locomotive Easter Egg[span_7](end_span)
+                    printOutput(`
+      (  ) (@@) ( )  (@)  ()    @@    O     @     O     @
+ (@@@)
+     (    )
+  (@@@@)
+(   )
+    ====        ________                ___________
+_D _|  |_______/        \\__I_I_____===__|_________|
+ | (_)---  |   H\\________/ |   |        =|___ ___|
+ /     |  |   H  |  |     |   |         ||_| |_||
+|      |  |   H  |__--------------------| [___] |
+| ________|___H__/__|_____/[][]~\\_______|       |
+|/ |   |-----------I_____I [][] []  D   |=======|__
+__/ =| o |=-~~\\  /~~\\  /~~\\  /~~\\ ____Y___________|__
+ |/-=|___|=    ||    ||    ||    |_____/~\\___/
+  \\_/      \\O=====O=====O=====O_/      \\_/
+                    `);
+                    break;
+
+                case "figlet":
+                    [span_8](start_span)// ASCII Text display[span_8](end_span)
+                    const msg = args.slice(1).join(" ") || "HELLO";
+                    printOutput(`
+  _   _      _ _       
+ | | | | ___| | | ___  
+ | |_| |/ _ \\ | |/ _ \\ 
+ |  _  |  __/ | | (_) |
+ |_| |_|\\___|_|_|\\___/ 
+ (${msg})
+                    `);
+                    break;
+
+                default:
+                    printOutput(`${cmd}: command not found`);
+            }
+        }
+
+        // --- EVENT LISTENERS ---
+
+        inputField.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const cmd = this.value;
+                printOutput(`${user}@${hostname}:${currentDir}$ ${cmd}`);
+                processCommand(cmd);
+                this.value = '';
+                window.scrollTo(0, document.body.scrollHeight);
+            }
+        });
+
+        // Keep focus on input
+        document.body.addEventListener('click', () => {
+            inputField.focus();
+        });
+
+        // Initial Render
+        renderMission();
+        inputField.focus();
+
+    </script>
+</body>
+</html>
