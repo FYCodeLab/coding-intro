@@ -7,7 +7,7 @@ Welcome to **Coding Intro Courses**! This repository contains beginner-friendly 
 
 ## 📌 Courses Available
 
-### 📘 [Coding-Intro](https://github.com/FYCodeLab/coding-intro)
+### 📘 [Intro to R](https://github.com/FYCodeLab/coding-intro)
 ![Intro to R](https://img.shields.io/badge/Intro%20to%20the%20programming%20language%20R-276DC3?style=for-the-badge&logo=r&logoColor=white)\
 A beginner-friendly programming repository covering the basics of R.  
 - **Chapter 1 - The Basics of R**  
@@ -22,6 +22,8 @@ A beginner-friendly programming repository covering the basics of R.
 [![French Flag](https://flagcdn.com/24x18/fr.png)](https://colab.research.google.com/github/FYCodeLab/coding-intro/blob/main/R/INTRODUCTION_A_R_CH2_F_G.ipynb)&nbsp;[![Open in collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/FYCodeLab/coding-intro/blob/main/R/INTRODUCTION_A_R_CH2_F_G.ipynb)&nbsp;&nbsp;&nbsp;&nbsp; [![UK Flag](https://flagcdn.com/24x18/gb.png)](https://colab.research.google.com/github/FYCodeLab/coding-intro/blob/main/R/INTRO_TO_R_CH2_EN_G.ipynb)&nbsp;[![Open in collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/FYCodeLab/coding-intro/blob/main/R/INTRO_TO_R_CH2_EN_G.ipynb)
 
 <BR>
+
+### 📘 [Intro to Python](https://github.com/FYCodeLab/coding-intro)
 
 ![Intro to Python](https://img.shields.io/badge/Intro%20to%20the%20programming%20language%20Python-3776AB?style=for-the-badge&logo=python&logoColor=white)\
 A beginner-friendly programming repository covering the basics of tye Python programming language. 
