@@ -1,6 +1,7 @@
 # Coding-Intro 🚀
-Welcome to **Coding Intro Courses**! This repository contains beginner-friendly programming courses.
+Welcome to **Coding Intro Courses**! This repository contains beginner-friendly programming courses.\
 
+[![Intro to R](https://img.shields.io/badge/[Web]%20Intro%20to%20R-276DC3?style=for-the-badge&logo=homeassistantcommunitystore&logoColor=white)](https://fycodelab.github.io/coding-intro/) [![Intro to R](https://img.shields.io/badge/[Repo]%20Intro%20to%20R-276DC3?style=for-the-badge&logo=github&logoColor=white)](https://github.com/FYCodeLab/coding-intro)
 ---
 
 ## 📌 Courses Available
