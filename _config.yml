@@ -1,5 +1,5 @@
 title: SweetSpot
-remote_theme: just-the-docs/just-the-docs
+remote_theme: jeffreytse/jekyll-theme-yat
 
 plugins:
   - jekyll-remote-theme
