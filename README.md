@@ -24,7 +24,7 @@ A beginner-friendly programming repository covering the basics of R.
 <BR>
 
 ![Intro to Python](https://img.shields.io/badge/Intro%20to%20the%20programming%20language%20Python-3776AB?style=for-the-badge&logo=python&logoColor=white)\
-A beginner-friendly programming repository covering the basics of R.  
+A beginner-friendly programming repository covering the basics of tye Python programming language. 
 - **Chapter 1 - Basic functions in Python**  
 📖 Learn the basic operations and functions.\
 🔗 **Open the course in Google Colab**:
